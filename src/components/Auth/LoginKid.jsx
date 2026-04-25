@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/firestore.js";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import "../Styles/Login.css";
 
 export default function LoginKid() {
@@ -27,35 +27,36 @@ export default function LoginKid() {
     try {
       const hashed = await hashPassword(password);
 
-      const querySnapshot = await getDocs(collection(db, "users"));
+      // 🔥 query נכון במקום getDocs על כל המשתמשים
+      const q = query(
+        collection(db, "children"),
+        where("username", "==", username)
+      );
+
+      const snapshot = await getDocs(q);
 
       let found = null;
 
-      querySnapshot.forEach((doc) => {
-        const parent = doc.data();
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
 
-        if (parent.children) {
-          const match = parent.children.find(
-            (c) =>
-              c.username === username &&
-              c.passwordHash === hashed
-          );
-
-          if (match) {
-            found = {
-              ...match,
-              parentId: parent.id,
-              user_type: "child",
-            };
-          }
+        if (data.passwordHash === hashed) {
+          found = {
+            id: docSnap.id,
+            ...data,
+            user_type: "child",
+          };
         }
       });
 
-      if (!found) throw new Error("שם משתמש או סיסמה שגויים");
+      if (!found) {
+        throw new Error("שם משתמש או סיסמה שגויים");
+      }
 
       navigate("/MealPlaningKid", {
         state: { user: found },
       });
+
     } catch (err) {
       alert("שגיאה: " + err.message);
     } finally {
@@ -73,7 +74,6 @@ export default function LoginKid() {
           placeholder="שם משתמש"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
         />
 
         <input
@@ -81,7 +81,6 @@ export default function LoginKid() {
           placeholder="סיסמה"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
 
         <button disabled={loading}>

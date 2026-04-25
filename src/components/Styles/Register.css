@@ -11,6 +11,7 @@
   background: var(--bg);
   padding: 40px 20px;
   box-sizing: border-box;
+  direction: rtl;
 }
 
 /* TITLE */
@@ -53,7 +54,7 @@
 
   border: 1px solid var(--border);
 
-  font-size: 16px;
+  font-size: 1.5em;
 
   background: var(--bg);
   color: var(--text);
@@ -79,9 +80,9 @@
   border: none;
 
   background: var(--primary);
-  color: var(--text-h);
+  color: var(--text-btn);
 
-  font-size: 16px;
+  font-size: 1.5em;
   font-weight: 600;
 
   cursor: pointer;

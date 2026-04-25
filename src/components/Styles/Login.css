@@ -1,69 +1,97 @@
-
 .login-container {
- position: absolute;
-  top:0vh;
-  right:0vh;
+  position: absolute;
+  top: 0;
+  right: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #ffe4e1 0%, #ffc0cb 100%);
+
+  /* 🌿 רקע מהפלטה */
+  background: linear-gradient(
+    135deg,
+    var(--soft-yellow),
+    var(--bg)
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-title {
+  position: absolute;
+  top: 8vh;
+  right: 50%;
+  transform: translateX(50%);
+
+  font-size: clamp(28px, 5vmin, 48px);
+  font-family: var(--heading);
+  font-weight: 600;
+
+  color: var(--text-h);
 }
 
 .login-form {
-position: relative;
-    display: flex;
-    margin-top: 22vh;
-    flex-direction: column;
-    width: 35vw;
-right: -30vw; 
- height: 29vh;
-    padding: 40px;
-    background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+
+  width: min(420px, 90vw);
+  padding: 40px;
+
+  background: var(--surface);
+  border-radius: 20px;
+
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+
+  gap: 14px;
 }
 
-
+/* INPUTS */
 .login-form input {
   width: 100%;
-  padding: 12px 15px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  padding: 14px 16px;
+
+  border-radius: 12px;
+  border: 1px solid var(--border);
+
   font-size: 16px;
-  transition: border-color 0.2s;
+
+  background: var(--bg);
+  color: var(--text);
+
+  transition: 0.2s;
 }
 
 .login-form input:focus {
-  border-color: #d81b60;
   outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
+/* BUTTON */
 .login-form button {
   width: 100%;
-  padding: 12px 0;
+  padding: 14px;
+
   border: none;
-  border-radius: 15px;
-  background-color: #ff69b4;
+  border-radius: 14px;
+
+  background: var(--primary);
   color: white;
+
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 600;
+
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+
+  transition: 0.2s;
 }
 
 .login-form button:hover {
-  background-color: #ff1493;
-  transform: translateY(-3px);
+  background: var(--primary-hover);
+  transform: translateY(-2px);
 }
 
-
-.login-title {
-color: #d81b60;
-    font-size: 5vmin;
-    margin-top: 10vh;
-    position: absolute;
-    right: 50%;
-    transform: translateX(50%);
-    font-family: 'Rubik Spray Paint';
-    font-weight: 500;
+.login-form button:active {
+  transform: scale(0.98);
 }

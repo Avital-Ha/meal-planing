@@ -47,37 +47,41 @@ export default function MealPlaningKid() {
   if (!user) return <div>אין גישה</div>;
 
   return (
-    <div className="kid-container">
-      <h2>היי {user.username} 👋</h2>
+  <div className="kid-container">
+  <h2>היי {user.username} 👋</h2>
 
-      <table>
-        <thead>
-          <tr>
-            {days.map((d) => (
-              <th key={d}>{d}</th>
+  <div className="kid-table-wrapper">
+    <table className="kid-table">
+      <thead>
+        <tr>
+          {days.map((d) => (
+            <th key={d}>{d}</th>
+          ))}
+        </tr>
+      </thead>
+
+      <tbody>
+        {Object.keys(template).map((meal) => (
+          <tr key={meal}>
+            {days.map((day) => (
+              <td key={day}>
+                <input
+                  value={weekPlan[day][meal]}
+                  onChange={(e) =>
+                    handleChange(day, meal, e.target.value)
+                  }
+                />
+              </td>
             ))}
           </tr>
-        </thead>
+        ))}
+      </tbody>
+    </table>
+  </div>
 
-        <tbody>
-          {Object.keys(template).map((meal) => (
-            <tr key={meal}>
-              {days.map((day) => (
-                <td key={day}>
-                  <input
-                    value={weekPlan[day][meal]}
-                    onChange={(e) =>
-                      handleChange(day, meal, e.target.value)
-                    }
-                  />
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <button onClick={save}>שמור תפריט</button>
-    </div>
+  <button className="kid-save-btn" onClick={save}>
+    שמור תפריט
+  </button>
+</div>
   );
 }

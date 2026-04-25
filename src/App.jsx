@@ -33,8 +33,8 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
-       <Route path="/login-parent" element={<LoginParent />} />
-        <Route path="/login-kid" element={<LoginKid />} />
+       <Route path="/loginParent" element={<LoginParent />} />
+        <Route path="/loginKid" element={<LoginKid />} />
 
         {/* 👨‍👩‍👧‍👦 הורה */}
         <Route path="/MealPlaningParent" element={<MealPlaningParent />} />

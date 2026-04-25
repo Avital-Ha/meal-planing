@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase/auth.js";
-import { db } from "../../firebase/firestore.js";
 import {
   createUserWithEmailAndPassword,
   updateProfile,
   sendEmailVerification,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase/firestore.js";
+import { doc, setDoc, collection } from "firebase/firestore";
 import "../Styles/Register.css";
 
 export default function Register() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [children, setChildren] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
 
-  // 🔐 פונקציית hash בסיסית
+  // 🔐 hash
   const hashPassword = async (password) => {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
@@ -30,28 +31,23 @@ export default function Register() {
       .join("");
   };
 
-  // ➕ הוספת ילד
   const addChild = () => {
-    setChildren([...children, { username: "", password: "" }]);
+    setChildren((prev) => [...prev, { username: "", password: "" }]);
   };
 
-  // ✏️ עדכון ילד
   const updateChild = (index, field, value) => {
     const updated = [...children];
     updated[index][field] = value;
     setChildren(updated);
   };
 
-  // ❌ מחיקת ילד
   const removeChild = (index) => {
-    const updated = children.filter((_, i) => i !== index);
-    setChildren(updated);
+    setChildren(children.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess(false);
 
     if (!fullName || !email || !password) {
       setError("נא למלא את כל השדות");
@@ -59,11 +55,14 @@ export default function Register() {
     }
 
     try {
+      // 👨 הורה Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
+
+      const parentId = userCredential.user.uid;
 
       await updateProfile(userCredential.user, {
         displayName: fullName,
@@ -71,25 +70,30 @@ export default function Register() {
 
       await sendEmailVerification(userCredential.user);
 
-      // 🔐 עושים hash לסיסמאות הילדים
-      const childrenWithHash = await Promise.all(
-        children.map(async (child, index) => ({
-          id: index + 1,
-          username: child.username,
-          passwordHash: await hashPassword(child.password),
-          user_type: "child",
-          parentId: userCredential.user.uid,
-        }))
-      );
-
-      await setDoc(doc(db, "users", userCredential.user.uid), {
-        id: userCredential.user.uid,
+      // 👨‍👩‍👧 parent document
+      await setDoc(doc(db, "parents", parentId), {
         full_name: fullName,
         email,
         user_type: "parent",
-        children: childrenWithHash,
         createdAt: new Date(),
       });
+
+      // 👶 children collection
+      await Promise.all(
+        children.map(async (child) => {
+          const passwordHash = await hashPassword(child.password);
+
+          const childRef = doc(collection(db, "children"));
+
+          await setDoc(childRef, {
+            username: child.username,
+            passwordHash,
+            parentId,
+            user_type: "child",
+            createdAt: new Date(),
+          });
+        })
+      );
 
       setSuccess(true);
     } catch (err) {
@@ -100,13 +104,10 @@ export default function Register() {
   if (success) {
     return (
       <div className="register-container">
-        <h2 className="Entrance-title">הצלחה!</h2>
-        <p className="register-text">נרשמת בהצלחה 🎉</p>
+        <h2 className="Register-title">הצלחה 🎉</h2>
+        <p className="register-text">נרשמת בהצלחה</p>
 
-        <button
-          className="register-button2"
-          onClick={() => navigate("/login")}
-        >
+        <button className="register-button2" onClick={() => navigate("/")}>
           מעבר להתחברות
         </button>
       </div>
@@ -140,14 +141,14 @@ export default function Register() {
           minLength={6}
         />
 
-        {/* ילדים */}
+        {/* 👶 ילדים */}
         {children.map((child, index) => (
           <div key={index} className="child-form">
             <h4>ילד {index + 1}</h4>
 
             <input
               type="text"
-              placeholder="שם משתמש לילד"
+              placeholder="שם משתמש"
               value={child.username}
               onChange={(e) =>
                 updateChild(index, "username", e.target.value)
@@ -156,7 +157,7 @@ export default function Register() {
 
             <input
               type="password"
-              placeholder="סיסמה לילד"
+              placeholder="סיסמה"
               value={child.password}
               onChange={(e) =>
                 updateChild(index, "password", e.target.value)
@@ -168,16 +169,12 @@ export default function Register() {
               onClick={() => removeChild(index)}
               className="remove-child-button"
             >
-              ❌ הסר ילד
+              ❌ מחק ילד
             </button>
           </div>
         ))}
 
-        <button
-          type="button"
-          className="add-child-button"
-          onClick={addChild}
-        >
+        <button type="button" onClick={addChild} className="add-child-button">
           ➕ הוסף ילד
         </button>
 

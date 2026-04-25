@@ -1,33 +1,114 @@
-.meal-container {
-  direction: rtl;
-  padding: 20px;
-  text-align: center;
+.kid-container {
+  min-height: 100vh;
+  padding: 60px 30px;
+
+  background: linear-gradient(135deg, var(--bg), var(--soft-yellow));
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 30px;
 }
 
-.table-wrapper {
+.kid-container h2 {
+  font-size: 32px;
+  color: var(--text-h);
+}
+
+/* wrapper */
+.kid-table-wrapper {
+  width: 100%;
+  max-width: 1200px;
+
+  background: var(--surface);
+  border-radius: 24px;
+
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+
   overflow-x: auto;
+  padding: 20px;
 }
 
-.meal-table {
+/* table */
+.kid-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+  min-width: 900px;
+  border-collapse: separate;
+  border-spacing: 0 12px;
 }
 
-.meal-table th,
-.meal-table td {
-  border: 1px solid #ccc;
-  padding: 10px;
+/* headers */
+.kid-table th {
+  padding: 18px;
+  font-size: 16px;
+  font-weight: 800;
+
+  background: linear-gradient(
+    135deg,
+    var(--primary),
+    var(--accent)
+  );
+
+  color: var(--text-h);
+
+  border-radius: 14px;
 }
 
-.meal-table input {
-  width: 100%;
-  padding: 5px;
+/* cells */
+.kid-table td {
+  padding: 16px;
+  min-width: 140px;
+
+  background: var(--surface);
   text-align: center;
+
+  border-radius: 14px;
 }
 
-.save-button {
+/* hover */
+.kid-table tr:hover td {
+  background: var(--soft-yellow);
+}
+
+/* input */
+.kid-table input {
+  width: 100%;
+  padding: 12px;
+
+  font-size: 16px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  background: var(--bg);
+  color: var(--text);
+
+  outline: none;
+}
+
+.kid-table input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* button */
+.kid-save-btn {
   margin-top: 20px;
-  padding: 10px 20px;
+  padding: 14px 28px;
+
+  background: var(--primary);
+  color: var(--text-btn, #000);
+
+  border: none;
+  border-radius: 14px;
+
+  font-weight: 700;
+
   cursor: pointer;
+}
+
+.kid-save-btn:hover {
+  background: var(--primary-hover);
 }

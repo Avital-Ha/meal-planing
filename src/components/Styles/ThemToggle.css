@@ -1,32 +1,32 @@
 .theme-toggle {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  top: 20px;
+  right: 20px;
   z-index: 999;
 }
 
 .theme-btn {
-  width: 64px;
-  height: 34px;
+  width: 90px;
+  height: 44px;
 
   border-radius: 999px;
   border: 1px solid var(--border);
 
-  background: var(--soft-yellow);
+  background: var(--surface);
   box-shadow: var(--shadow);
 
   display: flex;
   align-items: center;
 
-  padding: 4px;
+  padding: 6px;
   cursor: pointer;
 
   transition: 0.3s ease;
 }
 
 .theme-btn .thumb {
-  width: 26px;
-  height: 26px;
+  width: 34px;
+  height: 34px;
 
   border-radius: 50%;
 
@@ -37,15 +37,17 @@
   background: var(--primary);
   color: #fff;
 
+  font-size: 18px;
+
   transition: 0.3s ease;
   transform: translateX(0);
 }
 
 .theme-btn.dark {
-  background: #2a2416;
+  background: var(--soft-yellow);
 }
 
 .theme-btn.dark .thumb {
-  transform: translateX(28px);
+  transform: translateX(44px);
   background: var(--accent);
 }
