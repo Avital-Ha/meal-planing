@@ -5,28 +5,45 @@
   z-index: 999;
 }
 
+/* ===== TRACK ===== */
 .theme-btn {
-  width: 90px;
-  height: 44px;
+  width: 92px;
+  height: 46px;
 
   border-radius: 999px;
-  border: 1px solid var(--border);
 
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--surface), var(--bg));
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 
   display: flex;
   align-items: center;
 
-  padding: 6px;
+  padding: 5px;
+
   cursor: pointer;
 
-  transition: 0.3s ease;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
 }
 
+/* subtle glow */
+.theme-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, var(--accent), transparent 60%);
+  opacity: 0.08;
+}
+
+/* ===== THUMB ===== */
 .theme-btn .thumb {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
 
   border-radius: 50%;
 
@@ -34,20 +51,41 @@
   align-items: center;
   justify-content: center;
 
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #fff;
 
   font-size: 18px;
 
-  transition: 0.3s ease;
-  transform: translateX(0);
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.15),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ===== DARK MODE STATE ===== */
 .theme-btn.dark {
-  background: var(--soft-yellow);
+  background: linear-gradient(135deg, var(--bg), var(--surface));
 }
 
+/* slide animation */
 .theme-btn.dark .thumb {
-  transform: translateX(44px);
-  background: var(--accent);
+  transform: translateX(46px);
+  background: linear-gradient(135deg, #ffd86b, #ffb347);
+}
+
+/* ===== HOVER ===== */
+.theme-btn:hover {
+  transform: scale(1.05);
+}
+
+.theme-btn:hover .thumb {
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+/* ===== ACTIVE PRESS ===== */
+.theme-btn:active {
+  transform: scale(0.98);
 }

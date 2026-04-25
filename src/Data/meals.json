@@ -1,0 +1,86 @@
+{
+  "breakfast": [
+    { "label": "קורנפלקס עם חלב", "emoji": "🥣", "type": "yellow" },
+    { "label": "שוקו ולחמנייה", "emoji": "🥤", "type": "red" },
+    { "label": "חביתה", "emoji": "🍳", "type": "green" },
+    { "label": "טוסט גבינה", "emoji": "🥪", "type": "yellow" },
+    { "label": "יוגורט", "emoji": "🥛", "type": "green" },
+    { "label": "מעדן שוקולד (דני / מילקי בוקר)", "emoji": "🍫", "type": "red" },
+    { "label": "בייגל עם גבינה", "emoji": "🥯", "type": "yellow" },
+    { "label": "שוקו + עוגייה", "emoji": "🍪", "type": "red" },
+    { "label": "פנקייק", "emoji": "🥞", "type": "yellow" },
+    { "label": "לחם עם שוקולד", "emoji": "🍞", "type": "red" }
+  ],
+
+  "schoolMeal": [
+    { "label": "סנדוויץ גבינה צהובה", "emoji": "🥪", "type": "yellow" },
+    { "label": "סנדוויץ חביתה", "emoji": "🥪", "type": "green" },
+    { "label": "סנדוויץ שוקולד", "emoji": "🍫", "type": "red" },
+    { "label": "סנדוויץ טונה", "emoji": "🥪", "type": "green" },
+    { "label": "סנדוויץ פסטרמה", "emoji": "🥪", "type": "yellow" },
+    { "label": "לחמנייה עם חומוס", "emoji": "🥙", "type": "green" },
+    { "label": "טוסט חתוך לקופסה", "emoji": "🧀", "type": "yellow" },
+    { "label": "פיתה עם שניצל קר", "emoji": "🍗", "type": "yellow" },
+    { "label": "מלפפון + גזר חתוך", "emoji": "🥕", "type": "green" },
+    { "label": "ענבים בקופסה", "emoji": "🍇", "type": "green" },
+    { "label": "בננה", "emoji": "🍌", "type": "green" },
+    { "label": "תפוח חתוך", "emoji": "🍎", "type": "green" },
+    { "label": "קרקרים", "emoji": "🍘", "type": "yellow" },
+    { "label": "חטיף אנרגיה", "emoji": "🍫", "type": "yellow" },
+    { "label": "מילקי קטן", "emoji": "🥛", "type": "red" }
+  ],
+
+  "lunch": [
+    { "label": "שניצל ואורז", "emoji": "🍗", "type": "yellow" },
+    { "label": "פסטה ברוטב אדום", "emoji": "🍝", "type": "yellow" },
+    { "label": "עוף ותפוחי אדמה", "emoji": "🍗", "type": "green" },
+    { "label": "קציצות ברוטב", "emoji": "🍖", "type": "yellow" },
+    { "label": "אורז עם ירקות", "emoji": "🍚", "type": "green" },
+    { "label": "פיצה", "emoji": "🍕", "type": "red" },
+    { "label": "המבורגר", "emoji": "🍔", "type": "red" },
+    { "label": "קוסקוס", "emoji": "🥘", "type": "yellow" },
+    { "label": "דג אפוי", "emoji": "🐟", "type": "green" },
+    { "label": "מרק ירקות", "emoji": "🍲", "type": "green" },
+    { "label": "שווארמה", "emoji": "🌯", "type": "red" },
+    { "label": "פלאפל", "emoji": "🧆", "type": "yellow" },
+    { "label": "מוקפץ", "emoji": "🥦", "type": "green" },
+    { "label": "פסטה שמנת", "emoji": "🍝", "type": "red" },
+    { "label": "אורז עם שניצל", "emoji": "🍗", "type": "yellow" }
+  ],
+
+  "snack": [
+    { "label": "תפוח", "emoji": "🍎", "type": "green" },
+    { "label": "בננה", "emoji": "🍌", "type": "green" },
+    { "label": "יוגורט", "emoji": "🥛", "type": "green" },
+    { "label": "מילקי", "emoji": "🍫", "type": "red" },
+    { "label": "עוגייה", "emoji": "🍪", "type": "red" },
+    { "label": "חטיף שוקולד", "emoji": "🍫", "type": "red" },
+    { "label": "אגוזים", "emoji": "🌰", "type": "green" },
+    { "label": "פופקורן", "emoji": "🍿", "type": "yellow" },
+    { "label": "שוקו קטן", "emoji": "🥤", "type": "red" },
+    { "label": "גזר", "emoji": "🥕", "type": "green" },
+    { "label": "מלפפון", "emoji": "🥒", "type": "green" },
+    { "label": "ענבים", "emoji": "🍇", "type": "green" },
+    { "label": "קרקר", "emoji": "🍘", "type": "yellow" },
+    { "label": "גלידה", "emoji": "🍦", "type": "red" },
+    { "label": "חטיף קטן לבית ספר", "emoji": "🍫", "type": "yellow" }
+  ],
+
+  "dinner": [
+    { "label": "חביתה", "emoji": "🍳", "type": "green" },
+    { "label": "סלט ירקות", "emoji": "🥗", "type": "green" },
+    { "label": "טוסט", "emoji": "🥪", "type": "yellow" },
+    { "label": "מרק", "emoji": "🍲", "type": "green" },
+    { "label": "פסטה קלה", "emoji": "🍝", "type": "yellow" },
+    { "label": "שניצל", "emoji": "🍗", "type": "yellow" },
+    { "label": "אורז", "emoji": "🍚", "type": "green" },
+    { "label": "דג", "emoji": "🐟", "type": "green" },
+    { "label": "פיצה", "emoji": "🍕", "type": "red" },
+    { "label": "סנדוויץ גבינה", "emoji": "🧀", "type": "yellow" },
+    { "label": "ביצה קשה", "emoji": "🥚", "type": "green" },
+    { "label": "ירקות מאודים", "emoji": "🥦", "type": "green" },
+    { "label": "קציצות", "emoji": "🍖", "type": "yellow" },
+    { "label": "סלט טונה", "emoji": "🥗", "type": "green" },
+    { "label": "לחם וגבינה", "emoji": "🧀", "type": "yellow" }
+  ]
+}

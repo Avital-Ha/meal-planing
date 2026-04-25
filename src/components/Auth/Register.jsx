@@ -80,20 +80,22 @@ export default function Register() {
 
       // 👶 children collection
       await Promise.all(
-        children.map(async (child) => {
-          const passwordHash = await hashPassword(child.password);
+  children.map(async (child) => {
+    const passwordHash = await hashPassword(child.password);
 
-          const childRef = doc(collection(db, "children"));
+    const childRef = doc(
+      collection(db, "parents", parentId, "children")
+    );
 
-          await setDoc(childRef, {
-            username: child.username,
-            passwordHash,
-            parentId,
-            user_type: "child",
-            createdAt: new Date(),
-          });
-        })
-      );
+    await setDoc(childRef, {
+      username: child.username,
+      passwordHash,
+      parentId,
+      user_type: "child",
+      createdAt: new Date(),
+    });
+  })
+);
 
       setSuccess(true);
     } catch (err) {
