@@ -9,20 +9,44 @@ import {
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import "../Styles/Register.css";
-import LanguageSelector from "../LanguageSelector";
-import { useTranslation } from "react-i18next";
-import { useLanguage } from "../../context/LanguageContext";
 
 export default function Register() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [children, setChildren] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const { language, changeLanguage } = useLanguage();
-  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  // 🔐 פונקציית hash בסיסית
+  const hashPassword = async (password) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hashBuffer))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  };
+
+  // ➕ הוספת ילד
+  const addChild = () => {
+    setChildren([...children, { username: "", password: "" }]);
+  };
+
+  // ✏️ עדכון ילד
+  const updateChild = (index, field, value) => {
+    const updated = [...children];
+    updated[index][field] = value;
+    setChildren(updated);
+  };
+
+  // ❌ מחיקת ילד
+  const removeChild = (index) => {
+    const updated = children.filter((_, i) => i !== index);
+    setChildren(updated);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +54,7 @@ export default function Register() {
     setSuccess(false);
 
     if (!fullName || !email || !password) {
-      setError(t("register.errorFillAll"));
+      setError("נא למלא את כל השדות");
       return;
     }
 
@@ -47,11 +71,23 @@ export default function Register() {
 
       await sendEmailVerification(userCredential.user);
 
+      // 🔐 עושים hash לסיסמאות הילדים
+      const childrenWithHash = await Promise.all(
+        children.map(async (child, index) => ({
+          id: index + 1,
+          username: child.username,
+          passwordHash: await hashPassword(child.password),
+          user_type: "child",
+          parentId: userCredential.user.uid,
+        }))
+      );
+
       await setDoc(doc(db, "users", userCredential.user.uid), {
         id: userCredential.user.uid,
-        fullName,
+        full_name: fullName,
         email,
-        language,
+        user_type: "parent",
+        children: childrenWithHash,
         createdAt: new Date(),
       });
 
@@ -64,19 +100,14 @@ export default function Register() {
   if (success) {
     return (
       <div className="register-container">
-        <h2 className="Entrance-title">
-          {t("register.successTitle")}
-        </h2>
-
-        <p className="register-text">
-          {t("register.successText")}
-        </p>
+        <h2 className="Entrance-title">הצלחה!</h2>
+        <p className="register-text">נרשמת בהצלחה 🎉</p>
 
         <button
           className="register-button2"
           onClick={() => navigate("/login")}
         >
-          {t("register.goToLogin")}
+          מעבר להתחברות
         </button>
       </div>
     );
@@ -84,54 +115,76 @@ export default function Register() {
 
   return (
     <div className="register-container">
-        <LanguageSelector />
-      <h2 className="Register-title">
-        {t("register.title")}
-      </h2>
+      <h2 className="Register-title">הרשמה</h2>
 
       <form className="register-form" onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder={t("register.fullName")}
+          placeholder="שם מלא"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          required
         />
 
         <input
           type="email"
-          placeholder={t("register.email")}
+          placeholder="אימייל"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
 
         <input
           type="password"
-          placeholder={t("register.password")}
+          placeholder="סיסמה"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
           minLength={6}
         />
 
-        <select
-          value={language}
-          onChange={(e) => changeLanguage(e.target.value)}
-        >
-          <option value="en">English</option>
-          <option value="he">עברית</option>
-          <option value="ru">Русский</option>
-        </select>
+        {/* ילדים */}
+        {children.map((child, index) => (
+          <div key={index} className="child-form">
+            <h4>ילד {index + 1}</h4>
 
-        {error && (
-          <p className="register-error">
-            {error}
-          </p>
-        )}
+            <input
+              type="text"
+              placeholder="שם משתמש לילד"
+              value={child.username}
+              onChange={(e) =>
+                updateChild(index, "username", e.target.value)
+              }
+            />
+
+            <input
+              type="password"
+              placeholder="סיסמה לילד"
+              value={child.password}
+              onChange={(e) =>
+                updateChild(index, "password", e.target.value)
+              }
+            />
+
+            <button
+              type="button"
+              onClick={() => removeChild(index)}
+              className="remove-child-button"
+            >
+              ❌ הסר ילד
+            </button>
+          </div>
+        ))}
+
+        <button
+          type="button"
+          className="add-child-button"
+          onClick={addChild}
+        >
+          ➕ הוסף ילד
+        </button>
+
+        {error && <p className="register-error">{error}</p>}
 
         <button className="register-button" type="submit">
-          {t("register.button")}
+          הרשמה
         </button>
       </form>
     </div>

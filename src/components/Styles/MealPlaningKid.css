@@ -1,0 +1,33 @@
+.meal-container {
+  direction: rtl;
+  padding: 20px;
+  text-align: center;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.meal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.meal-table th,
+.meal-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.meal-table input {
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+}
+
+.save-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+}

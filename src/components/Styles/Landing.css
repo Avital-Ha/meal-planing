@@ -3,46 +3,60 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  text-align: center;
 
-  /* blue gradient background */
-  background: linear-gradient(135deg, #e0f2ff 0%, #90caf9 100%);
-  color: #333;
+  min-height: 100vh;
+
+  background: var(--bg);
+  color: var(--text-h);
+
+  gap: 28px;
+  padding: 40px 20px;
 }
-
 .landing-title {
-  font-size: 9vmin;
-  font-family: "Baumans", system-ui;
-  margin-bottom: 1rem;
-
-  /* deep blue */
-  color: #0d47a1;
+  color: var(--text-h);
+  font-size: clamp(32px, 6vw, 72px); /* רספונסיבי */
+  font-weight: 600;
+  margin: 0;
 }
-
 .landing-text {
-  font-size: 4vmin;
-  margin-bottom: 2rem;
-  width:90vw;
-
-  /* medium blue */
-  color: #1565c0;
+  color: var(--text);
+  font-size: clamp(16px, 2.5vw, 22px);
+  max-width: 600px;
+  line-height: 1.6;
+  text-align: center;
+}
+.landing-buttons {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 .landing-buttons button {
-  margin: 0 1rem;
-  padding: 0.8rem 1.5rem;
-  font-size: 4vmin;
+  background: var(--accent);
+  color: white;
+
+  border: 2px solid transparent;
+  border-radius: 12px;
+
+  padding: 14px 28px; /* 👈 גדול יותר */
+  font-size: 18px;     /* 👈 טקסט גדול יותר */
+  font-weight: 500;
+
   cursor: pointer;
 
-  /* blue button */
-  background-color: #42a5f5;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  transition: background-color 0.2s ease;
+  transition: 0.2s;
+  min-width: 160px;    /* 👈 כפתור אחיד */
 }
 
 .landing-buttons button:hover {
-  background-color: #1e88e5;
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+
+.landing-buttons button:focus {
+  outline: 3px solid var(--accent-border);
+  outline-offset: 3px;
 }
