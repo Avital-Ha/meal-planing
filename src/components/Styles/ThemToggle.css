@@ -1,17 +1,30 @@
+:root {
+  /* הגדרת משתנה מרכזי לגודל הכפתור - קל לשנות מכאן בעתיד */
+  /* clamp גורם לזה להשתנות בצורה חלקה בין גודל מינימלי למקסימלי לפי רוחב המסך */
+  --toggle-width: clamp(90px, 12vw, 140px); 
+  
+  /* חישוב שאר הממדים ביחס לרוחב כדי לשמור על פרופורציות מושלמות */
+  --toggle-height: calc(var(--toggle-width) / 2);
+  --toggle-padding: calc(var(--toggle-height) * 0.1); /* 10% מהגובה */
+  --thumb-size: calc(var(--toggle-height) - (var(--toggle-padding) * 2));
+  --travel-distance: calc(var(--toggle-width) - var(--thumb-size) - (var(--toggle-padding) * 2));
+}
+
 .theme-toggle {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  /* מיקום רספונסיבי בפינה */
+  top: clamp(15px, 3vw, 30px);
+  right: clamp(15px, 3vw, 30px);
   z-index: 999;
 }
 
-/* ===== TRACK ===== */
+/* ===== TRACK (המסילה) ===== */
 .theme-btn {
-  width: 92px;
-  height: 46px;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  padding: var(--toggle-padding);
 
   border-radius: 999px;
-
   border: 1px solid var(--border);
   background: linear-gradient(135deg, var(--surface), var(--bg));
 
@@ -21,11 +34,7 @@
 
   display: flex;
   align-items: center;
-
-  padding: 5px;
-
   cursor: pointer;
-
   transition: all 0.35s ease;
   position: relative;
   overflow: hidden;
@@ -40,13 +49,12 @@
   opacity: 0.08;
 }
 
-/* ===== THUMB ===== */
+/* ===== THUMB (הכפתור הזז) ===== */
 .theme-btn .thumb {
-  width: 36px;
-  height: 36px;
+  width: var(--thumb-size);
+  height: var(--thumb-size);
 
   border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +62,8 @@
   background: linear-gradient(135deg, var(--primary), var(--accent));
   color: #fff;
 
-  font-size: 18px;
+  /* גודל האייקון ישתנה בהתאמה לגודל הכפתור */
+  font-size: calc(var(--thumb-size) * 0.8); 
 
   box-shadow:
     0 6px 12px rgba(0, 0, 0, 0.15),
@@ -70,8 +79,14 @@
 
 /* slide animation */
 .theme-btn.dark .thumb {
-  transform: translateX(46px);
+  /* במקום מספר קבוע, התזוזה מחושבת אוטומטית לפי הגודל הנוכחי */
+  transform: translateX(var(--travel-distance));
   background: linear-gradient(135deg, #ffd86b, #ffb347);
+}
+
+/* היפוך כיוון התנועה במידה והאתר הוא RTL (עברית) כדי שהתזוזה תהיה נכונה */
+[dir="rtl"] .theme-btn.dark .thumb {
+  transform: translateX(calc(var(--travel-distance) * -1));
 }
 
 /* ===== HOVER ===== */

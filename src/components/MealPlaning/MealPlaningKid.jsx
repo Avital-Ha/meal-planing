@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { db } from "../../firebase/firestore.js";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import "../Styles/MealPlaningKid.css";
 import meals from "../../Data/meals.json";
 
@@ -9,170 +9,149 @@ export default function MealPlaningKid() {
   const location = useLocation();
   const user = location.state?.user;
 
-  const mealNames = {
-    breakfast: "ארוחת בוקר",
-    schoolMeal: "ארוחת עשר",
+  // 1. הגדרת סוגי הארוחות (המפתחות באנגלית כדי להתאים להורה)
+  const mealTypes = ["breakfast", "lunch", "dinner"];
+  
+  const mealLabels = {
+    breakfast: "בוקר",
     lunch: "צהריים",
-    snack: "חטיף",
     dinner: "ערב",
   };
 
-  const template = {
-    breakfast: "",
-    schoolMeal: "",
-    lunch: "",
-    snack: "",
-    dinner: "",
-  };
-
-  const dayNames = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+  const daysOfWeek = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
   const [weekOffset, setWeekOffset] = useState(0);
+  
+  // 🛒 הסטייט המרכזי שמחזיק את המטריצה
   const [weekPlan, setWeekPlan] = useState({});
 
-  // 📅 בניית ימים לפי שבוע
-  const days = useMemo(() => {
+  // 📅 חישוב ימי השבוע הנוכחי לתצוגה
+  const daysData = useMemo(() => {
     const start = new Date();
-    start.setDate(start.getDate() + weekOffset * 7);
+    const currentDay = start.getDay();
+    // מאפסים את השבוע שיתחיל תמיד מיום ראשון
+    start.setDate(start.getDate() - currentDay + weekOffset * 7);
 
-    return Array.from({ length: 7 }, (_, i) => {
+    return daysOfWeek.map((dayName, i) => {
       const date = new Date(start);
       date.setDate(start.getDate() + i);
-
       return {
-        key: date.toISOString().slice(0, 10),
-        label: `${dayNames[i]} ${date.getDate()}/${date.getMonth() + 1}`,
+        name: dayName, // "ראשון", "שני" וכו'
+        label: `${dayName} ${date.getDate()}/${date.getMonth() + 1}`,
+        dateStr: date.toISOString().slice(0, 10)
       };
     });
   }, [weekOffset]);
 
-  const weekId = days[0]?.key;
+  // מזהה המסמך בפיbase נקבע לפי תאריך יום ראשון של אותו שבוע
+  const weekId = daysData[0]?.dateStr;
 
-  // 🧠 טעינה / יצירה של שבוע
+  // 🧠 טעינת המטריצה מ-Firestore
   useEffect(() => {
-    if (!user || !weekId) return;
+    if (!user?.parentId || !user?.id || !weekId) return;
 
-    const loadWeek = async () => {
-      const ref = doc(
-        db,
-        "users",
-        user.parentId,
-        "children",
-        user.id,
-        "mealPlans",
-        weekId
-      );
-
-      const snap = await getDoc(ref);
-
-      if (snap.exists()) {
-        setWeekPlan(snap.data().weekPlan);
-      } else {
-        const init = {};
-        days.forEach((d) => {
-          init[d.key] = { ...template };
-        });
-        setWeekPlan(init);
+    const loadPlan = async () => {
+      const docRef = doc(db, "parents", user.parentId, "children", user.id, "mealPlans", weekId);
+      
+      try {
+        const snap = await getDoc(docRef);
+        
+        if (snap.exists() && snap.data().weekPlan) {
+          setWeekPlan(snap.data().weekPlan);
+        } else {
+          // אם אין מסמך, מייצרים מטריצה ריקה נקייה: לכל יום יש בוקר, צהריים וערב ריקים
+          const emptyMatrix = {};
+          daysOfWeek.forEach(day => {
+            emptyMatrix[day] = { breakfast: "", lunch: "", dinner: "" };
+          });
+          setWeekPlan(emptyMatrix);
+        }
+      } catch (err) {
+        console.error("שגיאה בטעינת התפריט:", err);
       }
     };
 
-    loadWeek();
-  }, [weekId]);
+    loadPlan();
+  }, [weekId, user, weekOffset]);
 
-  // ✏️ שינוי תא
-  const handleChange = (dayKey, meal, value) => {
+  // ✏️ עדכון משבצת ספציפית במטריצה [יום][סוג ארוחה]
+  const handleChange = (dayName, mealType, value) => {
     setWeekPlan((prev) => ({
       ...prev,
-      [dayKey]: {
-        ...prev[dayKey],
-        [meal]: value,
-      },
+      [dayName]: {
+        ...prev[dayName],
+        [mealType]: value
+      }
     }));
   };
 
-  // 💾 שמירה
-  const save = async () => {
-    await setDoc(
-      doc(
-        db,
-        "users",
-        user.parentId,
-        "children",
-        user.id,
-        "mealPlans",
-        weekId
-      ),
-      {
-        username: user.username,
-        weekPlan,
-        weekStart: weekId,
-        createdAt: new Date(),
-      }
-    );
+  // 💾 שמירת המטריצה כפי שהיא לתוך ה-Database
+  const savePlan = async () => {
+    if (!user?.parentId || !user?.id) {
+      alert("שגיאה: חסרים פרטי זיהוי");
+      return;
+    }
 
-    alert("נשמר בהצלחה 🎉");
+    const docRef = doc(db, "parents", user.parentId, "children", user.id, "mealPlans", weekId);
+
+    try {
+      await setDoc(docRef, {
+        name: user.name || user.username || "ילד",
+        weekPlan: weekPlan, // שמירת המטריצה המסודרת
+        weekStart: weekId,
+        updatedAt: serverTimestamp()
+      });
+      alert("התפריט נשמר בהצלחה! הלוח עודכן אצל ההורה 🏆");
+    } catch (err) {
+      alert("שגיאה בשמירה: " + err.message);
+    }
   };
 
-  if (!user) return <div>אין גישה</div>;
+  if (!user) return <div className="error-access">אין גישה. נא להתחבר מחדש.</div>;
 
   return (
     <div className="kid-container">
-      <h2>היי {user.username} 👋</h2>
+      <h2>היי {user.name || user.username} 👋</h2>
+      <p>בנה את לוח הארוחות השבועי שלך:</p>
 
       {/* ניווט שבועות */}
       <div className="week-nav">
-        <button className="nav-btn" onClick={() => setWeekOffset((p) => p - 1)}>
-          ‹
-        </button>
-
-        <h3>
-          {days[0]?.label} - {days[6]?.label}
-        </h3>
-
-        <button className="nav-btn" onClick={() => setWeekOffset((p) => p + 1)}>
-          ›
-        </button>
+        <button className="nav-btn" onClick={() => setWeekOffset((p) => p - 1)}>‹</button>
+        <h3>{daysData[0]?.label} - {daysData[6]?.label}</h3>
+        <button className="nav-btn" onClick={() => setWeekOffset((p) => p + 1)}>›</button>
       </div>
 
-      {/* טבלה */}
+      {/* טבלת המטריצה של הילד */}
       <div className="kid-table-wrapper">
         <table className="kid-table">
           <thead>
             <tr>
-              <th></th>
-              {days.map((d) => (
-                <th key={d.key}>{d.label}</th>
+              <th>ארוחה</th>
+              {daysData.map((d) => (
+                <th key={d.name}>{d.label}</th>
               ))}
             </tr>
           </thead>
 
           <tbody>
-            {Object.keys(template).map((meal) => (
-              <tr key={meal}>
-                <th className="meal-label">{mealNames[meal]}</th>
+            {mealTypes.map((mealType) => (
+              <tr key={mealType}>
+                <td className="meal-label">{mealLabels[mealType]}</td>
 
-                {days.map((day) => (
-                  <td key={day.key}>
+                {daysData.map((day) => (
+                  <td key={day.name}>
                     <div className="select-wrapper">
                       <select
-                        value={weekPlan?.[day.key]?.[meal] || ""}
-                        onChange={(e) =>
-                          handleChange(day.key, meal, e.target.value)
-                        }
+                        value={weekPlan[day.name]?.[mealType] || ""}
+                        onChange={(e) => handleChange(day.name, mealType, e.target.value)}
                       >
-                        <option value="">בחר ארוחה</option>
-
-                        {meals[meal].map((item, i) => (
+                        <option value="">בחר מנה</option>
+                        {meals[mealType]?.map((item, i) => (
                           <option key={i} value={item.label}>
                             {item.emoji} {item.label}
                           </option>
                         ))}
                       </select>
-
-                      {/* + רק כשהשדה ריק */}
-                      {!weekPlan?.[day.key]?.[meal] && (
-                        <span className="plus">+</span>
-                      )}
                     </div>
                   </td>
                 ))}
@@ -182,8 +161,8 @@ export default function MealPlaningKid() {
         </table>
       </div>
 
-      <button className="kid-save-btn" onClick={save}>
-        שמור תפריט
+      <button className="kid-save-btn" onClick={savePlan}>
+        💾 שמור תפריט שבועי
       </button>
     </div>
   );

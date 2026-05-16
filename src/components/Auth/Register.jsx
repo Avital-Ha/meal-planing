@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { auth } from "../../firebase/auth.js";
+import { db } from "../../firebase/firestore.js";
+
 import {
   createUserWithEmailAndPassword,
   updateProfile,
   sendEmailVerification,
 } from "firebase/auth";
-import { db } from "../../firebase/firestore.js";
-import { doc, setDoc, collection } from "firebase/firestore";
+
+import {
+  doc,
+  setDoc,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+
 import "../Styles/Register.css";
 
 export default function Register() {
@@ -15,87 +25,82 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // 👶 רשימת הילדים (עכשיו צריך רק שם, בלי סיסמה!)
   const [children, setChildren] = useState([]);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
 
-  // 🔐 hash
-  const hashPassword = async (password) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hashBuffer))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  };
-
+  // 👶 הוספת ילד
   const addChild = () => {
-    setChildren((prev) => [...prev, { username: "", password: "" }]);
+    setChildren((prev) => [
+      ...prev,
+      { name: "" }, // שומרים רק את שם הילד
+    ]);
   };
 
-  const updateChild = (index, field, value) => {
+  // ✏️ עדכון שם הילד
+  const updateChild = (index, value) => {
     const updated = [...children];
-    updated[index][field] = value;
+    updated[index].name = value;
     setChildren(updated);
   };
 
+  // ❌ מחיקת ילד מהרשימה
   const removeChild = (index) => {
     setChildren(children.filter((_, i) => i !== index));
   };
 
+  // 🚀 submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     if (!fullName || !email || !password) {
-      setError("נא למלא את כל השדות");
+      setError("נא למלא את כל השדות של ההורה");
       return;
     }
 
     try {
-      // 👨 הורה Auth
-      const userCredential = await createUserWithEmailAndPassword(
+      // 👨 יצירת הורה ב-Auth
+      const cred = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
 
-      const parentId = userCredential.user.uid;
+      const parentId = cred.user.uid;
 
-      await updateProfile(userCredential.user, {
+      await updateProfile(cred.user, {
         displayName: fullName,
       });
 
-      await sendEmailVerification(userCredential.user);
+      await sendEmailVerification(cred.user);
 
-      // 👨‍👩‍👧 parent document
+      // 👨 שמירת ההורה ב-Firestore (תחת parents)
       await setDoc(doc(db, "parents", parentId), {
         full_name: fullName,
         email,
         user_type: "parent",
-        createdAt: new Date(),
+        createdAt: serverTimestamp(),
       });
 
-      // 👶 children collection
-      await Promise.all(
-  children.map(async (child) => {
-    const passwordHash = await hashPassword(child.password);
+      // 👶 שמירת הילדים תחת ההורה
+      for (const child of children) {
+        if (!child.name) continue;
 
-    const childRef = doc(
-      collection(db, "parents", parentId, "children")
-    );
-
-    await setDoc(childRef, {
-      username: child.username,
-      passwordHash,
-      parentId,
-      user_type: "child",
-      createdAt: new Date(),
-    });
-  })
-);
+        await addDoc(
+          collection(db, "parents", parentId, "children"),
+          {
+            name: child.name,
+            parentId,
+            user_type: "child",
+            createdAt: serverTimestamp(),
+          }
+        );
+      }
 
       setSuccess(true);
     } catch (err) {
@@ -107,9 +112,12 @@ export default function Register() {
     return (
       <div className="register-container">
         <h2 className="Register-title">הצלחה 🎉</h2>
-        <p className="register-text">נרשמת בהצלחה</p>
+        <p className="register-text">נרשמת בהצלחה! שלחנו מייל אימות לכתובת שלך.</p>
 
-        <button className="register-button2" onClick={() => navigate("/")}>
+        <button
+          className="register-button2"
+          onClick={() => navigate("/")}
+        >
           מעבר להתחברות
         </button>
       </div>
@@ -121,6 +129,8 @@ export default function Register() {
       <h2 className="Register-title">הרשמה</h2>
 
       <form className="register-form" onSubmit={handleSubmit}>
+        {/* 👨 פרטי הורה */}
+        <h3>פרטי הורה 👨‍👩‍👧</h3>
         <input
           type="text"
           placeholder="שם מלא"
@@ -137,33 +147,26 @@ export default function Register() {
 
         <input
           type="password"
-          placeholder="סיסמה"
+          placeholder="סיסמה (לפחות 6 תווים)"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           minLength={6}
         />
 
-        {/* 👶 ילדים */}
+        <hr style={{ margin: "20px 0", borderColor: "#eee" }} />
+
+        {/* 👶 פרטי ילדים */}
+        <h3>ילדים 👶</h3>
         {children.map((child, index) => (
-          <div key={index} className="child-form">
+          <div key={index} className="child-form" style={{ marginBottom: "15px" }}>
             <h4>ילד {index + 1}</h4>
 
             <input
               type="text"
-              placeholder="שם משתמש"
-              value={child.username}
-              onChange={(e) =>
-                updateChild(index, "username", e.target.value)
-              }
-            />
-
-            <input
-              type="password"
-              placeholder="סיסמה"
-              value={child.password}
-              onChange={(e) =>
-                updateChild(index, "password", e.target.value)
-              }
+              placeholder="שם הילד (למשל: עומר)"
+              value={child.name}
+              onChange={(e) => updateChild(index, e.target.value)}
+              required
             />
 
             <button
@@ -176,14 +179,19 @@ export default function Register() {
           </div>
         ))}
 
-        <button type="button" onClick={addChild} className="add-child-button">
+        <button
+          type="button"
+          onClick={addChild}
+          className="add-child-button"
+          style={{ marginBottom: "20px" }}
+        >
           ➕ הוסף ילד
         </button>
 
         {error && <p className="register-error">{error}</p>}
 
         <button className="register-button" type="submit">
-          הרשמה
+          בצע הרשמה
         </button>
       </form>
     </div>

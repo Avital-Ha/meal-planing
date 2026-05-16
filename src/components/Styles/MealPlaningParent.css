@@ -1,0 +1,424 @@
+/* קונטיינר ומבנה כללי */
+.parent-container {
+  min-height: 100vh;
+  padding: 4.5vw 2.5vw;
+
+  background: linear-gradient(135deg, var(--bg), var(--soft-yellow));
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  direction: rtl;
+
+  gap: 2.5vw;
+}
+
+.parent-header {
+  text-align: center;
+  margin-bottom: 3.5vw;
+}
+
+.parent-container h1 {
+    font-size: 3.5vw;
+    color: var(--text-h);
+    margin-top: -4vh;
+}
+
+.parent-subtitle {
+  font-size: 1.6vw;
+  color: var(--text);
+  opacity: 0.8;
+}
+
+/* כרטיסיית הילד - מורחבת כפי שמתבקש */
+.child-card-layout {
+border-radius: 2vw;
+    padding: 3vw;
+    margin-top: -10vh;
+    /* margin-bottom: 3vw; */
+    box-shadow: var(--shadow);
+    border: 0.1vw solid var(--border);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 93%;
+    box-sizing: border-box;
+    background: var(--card);
+}
+
+/* וריאציות צבעים עדינות ונעימות לכרטיסים מותאמות לפלטה החדשה */
+.color-variant-0 { background: linear-gradient(135deg, var(--card) 0%, var(--soft-yellow) 100%); }
+.color-variant-1 { background: linear-gradient(135deg, var(--card) 0%, #fff8e1 100%); }
+.color-variant-2 { background: linear-gradient(135deg, var(--card) 0%, #fbe9e7 100%); }
+.color-variant-3 { background: linear-gradient(135deg, var(--card) 0%, #fffde7 100%); }
+.color-variant-4 { background: linear-gradient(135deg, var(--card) 0%, #fdf5e6 100%); }
+.color-variant-5 { background: linear-gradient(135deg, var(--card) 0%, var(--bg) 100%); }
+
+.child-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin-top: -2vh;
+    padding-bottom: 0.5vw;
+    border-bottom: 0.25vw solid var(--border);
+}
+
+.child-card-header h2 {
+      font-size: 1.8vw;
+    color: var(--text-h);
+    margin: 0;
+}
+
+/* כפתור כיווץ ופריסה */
+.toggle-collapse-btn {
+  background: var(--surface);
+  border: 0.1vw solid var(--border);
+  padding: 0.8vw 1.8vw;
+  border-radius: 1vw;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.3vw;
+  color: var(--text);
+  box-shadow: 0 0.2vw 0.5vw rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+}
+
+.toggle-collapse-btn:hover {
+  background: var(--primary);
+  color: var(--text-btn, #ffffff);
+  border-color: var(--primary-hover);
+}
+
+.child-card-body {
+  margin-top: 2.5vw;
+}
+
+/* בורר שבועות המיושר למסך הילד */
+.week-picker-container {
+     display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+    margin-bottom: 3vw;
+    background: var(--surface);
+    border: 0.1vw solid var(--border);
+    padding: 1.2vw;
+    border-radius: 1.5vw;
+    width: fit-content;
+    margin-right: auto;
+    margin-left: auto;
+    box-shadow: var(--shadow);
+}
+
+.week-nav-btn {
+  background: var(--primary);
+  color: var(--text-btn, #ffffff);
+  border: none;
+  padding: 0.8vw 1.8vw;
+  border-radius: 1vw;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.3vw;
+  transition: background 0.2s ease;
+}
+
+.week-nav-btn:hover {
+  background: var(--primary-hover);
+}
+
+.week-current-label {
+  font-size: 1.5vw;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Flexbox פריסה פנימית */
+.parent-flex {
+  display: flex;
+  gap: 2.5vw;
+  align-items: flex-start;
+}
+
+/* אלמנט הטבלה */
+.parent-table-wrapper {
+  flex: 3.2;
+  background: var(--surface);
+  padding: 2.2vw;
+  border-radius: 1.8vw;
+  box-shadow: var(--shadow);
+  border: 0.1vw solid var(--border);
+  overflow-x: auto;
+}
+
+.parent-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: center;
+}
+
+.parent-table th, 
+.parent-table td {
+  padding: 1.2vw 1.2vw;
+  border-bottom: 0.1vw solid var(--border);
+  border-left: 0.1vw solid var(--border);
+  color: var(--text);
+  font-size: 1.2vw;
+}
+
+.parent-table th:last-child, 
+.parent-table td:last-child {
+  border-left: none;
+}
+
+.parent-table th {
+  background-color: var(--primary);
+  color: var(--text-btn, #ffffff);
+  font-weight: 700;
+  font-size: 1.5vw;
+}
+
+.parent-table th:first-child { border-top-right-radius: 1vw; }
+.parent-table th:last-child { border-top-left-radius: 1vw; }
+
+.meal-label {
+  background-color: var(--soft-yellow);
+  font-weight: 800;
+  color: var(--text-h);
+  width: 10vw;
+  font-size: 1.4vw;
+}
+
+/* מצבי תאים בטבלה */
+.clickable-meal-cell {
+  font-weight: 600;
+  color: var(--text);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clickable-meal-cell:hover {
+  background-color: var(--soft-yellow) !important;
+  box-shadow: inset 0 0 0 0.2vw var(--accent);
+  transform: scale(1.02);
+}
+
+.empty-meal-cell {
+  color: var(--text);
+  opacity: 0.4;
+}
+
+/* מדור רשימת קניות */
+.shopping-section {
+flex: 1.3;
+    background: var(--surface);
+    border-radius: 1.8vw;
+    padding: 2.2vw;
+    box-shadow: var(--shadow);
+    border: 0.1vw solid var(--border);
+    min-width: 18vw;
+}
+
+.shopping-title-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2vw;
+}
+
+.shopping-section h3 {
+  margin: 0;
+  color: var(--text-h);
+  font-size: 1.5vw;
+}
+
+.shopping-week-tag {
+  background: var(--soft-yellow);
+  padding: 0.4vw 1vw;
+  border-radius: 0.8vw;
+  font-size: 1.1vw;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.empty-list-placeholder {
+  font-size: 1.3vw;
+  color: var(--text);
+  opacity: 0.6;
+  text-align: center;
+  margin-top: 2.5vw;
+  line-height: 1.6;
+}
+
+/* פריט קניות בודד */
+.shopping-item {
+  background: var(--card);
+  border: 0.1vw solid var(--border);
+  border-radius: 1.2vw;
+  padding: 1.3vw;
+  margin-bottom: 1.2vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+}
+
+.shopping-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-name {
+  font-weight: 700;
+  font-size: 1.4vw;
+  color: var(--text);
+}
+
+.item-count {
+  background: var(--soft-yellow);
+  color: var(--text-h);
+  padding: 0.3vw 0.9vw;
+  border-radius: 1.5vw;
+  font-size: 1.2vw;
+  margin-right: 0.6vw;
+  font-weight: bold;
+}
+
+.delete-item-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.4vw;
+  transition: transform 0.2s ease;
+}
+
+.delete-item-btn:hover {
+  transform: scale(1.25);
+}
+
+.shopping-note-input {
+  width: 100%;
+  padding: 0.8vw 1.2vw;
+  border: 0.1vw solid var(--border);
+  background-color: var(--surface);
+  color: var(--text);
+  border-radius: 0.8vw;
+  font-size: 1.2vw;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.shopping-note-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 0.3vw var(--soft-yellow);
+}
+
+.no-children {
+  text-align: center;
+  margin-top: 4vw;
+  font-size: 1.8vw;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.error-access {
+  text-align: center;
+  margin-top: 8vw;
+  font-size: 2vw;
+  color: var(--danger);
+  font-weight: bold;
+}
+
+/* נקודות שבירה (Media Queries) - כדי למנוע מהטקסט להפוך לקטן מדי בניידים */
+@media (max-width: 1200px) {
+  .parent-flex {
+    flex-direction: column;
+    align-items: stroke;
+    gap: 4vw;
+  }
+  .shopping-section {
+    width: 100%;
+    min-width: 100%;
+  }
+  /* התאמת ה-VW למצב אנכי בו הכל פרוס ב-100% רוחב */
+  .shopping-section h3 { font-size: 3.5vw; }
+  .item-name, .parent-table th, .parent-table td, .meal-label { font-size: 2.5vw; }
+  .shopping-note-input, .item-count { font-size: 2.2vw; }
+}
+
+@media (max-width: 768px) {
+  .parent-container {
+    padding: 6vw 4vw;
+    gap: 5vw;
+  }
+  .child-card-layout {
+    padding: 5vw;
+    border-radius: 4vw;
+  }
+  .child-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3vw;
+    padding-bottom: 3vw;
+  }
+  .parent-container h1 { font-size: 7vw; }
+  .parent-subtitle { font-size: 3.5vw; }
+  .child-card-header h2 { font-size: 5vw; }
+  .toggle-collapse-btn { font-size: 3.5vw; padding: 2vw 4vw; border-radius: 2vw; }
+  .week-picker-container { gap: 4vw; padding: 3vw; border-radius: 3vw; }
+  .week-nav-btn { font-size: 3.5vw; padding: 2vw 4vw; border-radius: 2vw; }
+  .week-current-label { font-size: 3.8vw; }
+  
+  .parent-table th, .parent-table td { font-size: 3vw; padding: 3vw 2vw; }
+  .meal-label { font-size: 3vw; width: 18vw; }
+  
+  .shopping-section h3 { font-size: 4.5vw; }
+  .shopping-week-tag { font-size: 2.5vw; padding: 1vw 2vw; }
+  .item-name { font-size: 3.8vw; }
+  .item-count { font-size: 3vw; padding: 0.5vw 2vw; }
+  .shopping-note-input { font-size: 3.2vw; padding: 2vw 3vw; }
+  .delete-item-btn { font-size: 4.5vw; }
+}
+.whatsapp-share-btn {
+  width: 100%;
+  background-color: #25D366; /* הצבע הרשמי של וואטסאפ */
+  color: #ffffff;
+  border: none;
+  padding: 1vw 1.5vw;
+  border-radius: 1vw;
+  font-size: 1.3vw;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1.5vw;
+  box-shadow: 0 0.3vw 0.6vw rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5vw;
+}
+
+.whatsapp-share-btn:hover {
+  background-color: #20ba5a;
+  transform: scale(1.02);
+}
+
+/* התאמה לניידים וטאבלטים */
+@media (max-width: 1200px) {
+  .whatsapp-share-btn {
+    font-size: 2.5vw;
+    padding: 2vw;
+    border-radius: 1.8vw;
+    margin-top: 3vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .whatsapp-share-btn {
+    font-size: 3.5vw;
+    padding: 3vw;
+    border-radius: 2.5vw;
+    margin-top: 4vw;
+  }
+}
