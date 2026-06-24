@@ -1,7 +1,7 @@
 /* ===== CONTAINER ===== */
 .kid-container {
   min-height: 100vh;
-  padding: 60px 30px;
+  padding: 0 20px 30px;
 
   background: linear-gradient(135deg, var(--bg), var(--soft-yellow));
 
@@ -198,6 +198,139 @@ display: flex;
   background: var(--primary-hover);
   transform: translateY(-2px);
 }
+
+@media (max-width: 1200px) {
+  .kid-container {
+    padding: 36px 18px;
+    gap: 22px;
+  }
+
+  .week-nav {
+    flex-wrap: wrap;
+    padding: 1rem;
+    gap: 16px;
+  }
+
+  .week-nav h3 {
+    font-size: 1.2rem;
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 2rem;
+  }
+
+  .kid-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    min-height: 50vh;
+    height: auto;
+    padding: 12px;
+  }
+
+  .kid-table th,
+  .kid-table td {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+
+  .kid-save-btn {
+    width: 100%;
+    font-size: 1rem;
+    padding: 16px;
+  }
+
+  .select-wrapper select {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .kid-container {
+    padding: 32px 14px;
+    gap: 18px;
+  }
+
+  .kid-container h2 {
+    font-size: 2.4rem;
+  }
+
+  .week-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .week-nav h3 {
+    font-size: 1.05rem;
+  }
+
+  .nav-btn {
+    width: 42px;
+    height: 42px;
+    font-size: 1.8rem;
+  }
+
+  .kid-table-wrapper {
+    min-height: 48vh;
+    padding: 10px;
+  }
+
+  .kid-table th,
+  .kid-table td {
+    padding: 8px;
+    font-size: 0.95rem;
+  }
+
+  .meal-label {
+    font-size: 0.95rem;
+    padding: 8px;
+  }
+
+  .select-wrapper select {
+    padding: 10px 12px;
+  }
+
+  .kid-save-btn {
+    padding: 16px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .kid-container {
+    padding: 24px 12px;
+  }
+
+  .week-nav {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.6rem;
+  }
+
+  .kid-table th,
+  .kid-table td {
+    padding: 8px 6px;
+    font-size: 0.85rem;
+  }
+
+  .meal-label {
+    font-size: 0.9rem;
+  }
+
+  .kid-save-btn {
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+}
+
 /* ===== SELECT WRAPPER ===== */
 .select-wrapper {
   position: relative;

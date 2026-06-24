@@ -1,6 +1,6 @@
 import './App.css';
-import { useState, useEffect } from "react";
-import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useState, useEffect} from "react";
+import { HashRouter as Router, Routes, Route, useLocation ,useNavigate } from 'react-router-dom';
 import ThemeToggle from "./components/ThemeToggle.jsx";
 
 import Register from './components/Auth/Register.jsx';
@@ -16,6 +16,7 @@ import MealPlaningKid from './components/MealPlaning/MealPlaningKid.jsx';
 
 function AppContent() {
   const location = useLocation();
+  const navigate = useNavigate();
    const [theme, setTheme] = useState(
     localStorage.getItem("theme") || "light"
   );
@@ -29,6 +30,9 @@ function AppContent() {
   return (
     <div className="App">
             <ThemeToggle theme={theme} setTheme={setTheme} />
+         
+        <button type="button" className="home-btn" onClick={() => navigate("/")}>חזור לדף הבית</button>
+     
 
       <Routes>
         <Route path="/" element={<Landing />} />

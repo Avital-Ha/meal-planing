@@ -1,10 +1,8 @@
 /* קונטיינר ומבנה כללי */
 .parent-container {
   min-height: 100vh;
-  padding: 4.5vw 2.5vw;
-
+  padding: 0 2.5vw 4.5vw;
   background: linear-gradient(135deg, var(--bg), var(--soft-yellow));
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,7 +19,7 @@
 .parent-container h1 {
     font-size: 3.5vw;
     color: var(--text-h);
-    margin-top: -4vh;
+    margin-top: 0;
 }
 
 .parent-subtitle {
@@ -34,7 +32,7 @@
 .child-card-layout {
 border-radius: 2vw;
     padding: 3vw;
-    margin-top: -10vh;
+    margin-top: 0;
     /* margin-bottom: 3vw; */
     box-shadow: var(--shadow);
     border: 0.1vw solid var(--border);
@@ -334,7 +332,7 @@ flex: 1.3;
 @media (max-width: 1200px) {
   .parent-flex {
     flex-direction: column;
-    align-items: stroke;
+    align-items: stretch;
     gap: 4vw;
   }
   .shopping-section {
@@ -380,6 +378,93 @@ flex: 1.3;
   .shopping-note-input { font-size: 3.2vw; padding: 2vw 3vw; }
   .delete-item-btn { font-size: 4.5vw; }
 }
+
+@media (max-width: 600px) {
+  .parent-container {
+    padding: 8vw 5vw;
+  }
+
+  .parent-header {
+    margin-bottom: 4vw;
+  }
+
+  .parent-container h1 {
+    font-size: 8vw;
+  }
+
+  .parent-subtitle {
+    font-size: 4.5vw;
+  }
+
+  .child-card-layout {
+    padding: 5vw;
+  }
+
+  .week-picker-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3vw;
+    padding: 3vw;
+  }
+
+  .week-nav-btn {
+    width: 100%;
+    font-size: 3.5vw;
+    padding: 2.5vw;
+  }
+
+  .week-current-label {
+    font-size: 4vw;
+  }
+
+  .parent-table th,
+  .parent-table td {
+    font-size: 3.4vw;
+    padding: 2.2vw 1.5vw;
+  }
+
+  .meal-label {
+    width: auto;
+    font-size: 3.2vw;
+  }
+
+  .shopping-section {
+    padding: 3vw;
+  }
+
+  .shopping-section h3 {
+    font-size: 5vw;
+  }
+
+  .shopping-week-tag {
+    font-size: 3vw;
+    padding: 1vw 2vw;
+  }
+
+  .item-name {
+    font-size: 4vw;
+  }
+
+  .item-count {
+    font-size: 3.2vw;
+    padding: 0.8vw 2vw;
+  }
+
+  .shopping-note-input {
+    font-size: 3vw;
+    padding: 2.5vw 3vw;
+  }
+
+  .delete-item-btn {
+    font-size: 5vw;
+  }
+
+  .whatsapp-share-btn {
+    font-size: 4vw;
+    padding: 3.5vw;
+  }
+}
+
 .whatsapp-share-btn {
   width: 100%;
   background-color: #25D366; /* הצבע הרשמי של וואטסאפ */

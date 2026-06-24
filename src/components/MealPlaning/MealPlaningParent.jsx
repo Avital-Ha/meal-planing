@@ -214,9 +214,9 @@ export default function MealPlaningParent() {
                   
                   {/* בורר שבועות דינמי בדומה למסך הילד */}
                   <div className="week-picker-container">
-                    <button className="week-nav-btn" onClick={() => changeWeek(child.id, "prev")}>◀ שבוע קודם</button>
+                    <button className="week-nav-btn" onClick={() => changeWeek(child.id, "prev")}>▶ שבוע קודם</button>
                     <span className="week-current-label">טווח שבוע: <strong>{selectedWeek}</strong></span>
-                    <button className="week-nav-btn" onClick={() => changeWeek(child.id, "next")}>שבוע הבא ▶</button>
+                    <button className="week-nav-btn" onClick={() => changeWeek(child.id, "next")}> שבוע הבא ◀ </button>
                   </div>
 
                   <div className="parent-flex">

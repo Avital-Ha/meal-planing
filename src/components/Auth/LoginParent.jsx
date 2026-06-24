@@ -93,6 +93,7 @@ export default function LoginParent() {
 
   return (
     <div className="login-container">
+      <div className="login-conttent">
       {!isLoggedIn ? (
         <>
           <h1 className="login-header-text">כניסת הורה 👨‍👩‍👧</h1>
@@ -111,12 +112,17 @@ export default function LoginParent() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+              
             <button disabled={loading}>{loading ? "טוען..." : "התחבר"}</button>
           </form>
+        
         </>
       ) : (
         <>
           <h1 className="login-header-text">חיבור מכשיר לילד 👶</h1>
+          <p style={{ textAlign: "center", marginBottom: "16px", color: "var(--text)" }}>
+            בחר אם לחבר ילד או להמשיך ישירות לטבלת הקניות.
+          </p>
           <form onSubmit={handleApproveKid} className="login-form">
             <label>בחר איזה ילד לחבר:</label>
             <select 
@@ -140,8 +146,21 @@ export default function LoginParent() {
             />
             <button disabled={loading}>{loading ? "מאשר..." : "אשר וחבר ילד"}</button>
           </form>
+          <div style={{ width: "min(420px, 90vw)", marginTop: "18px", textAlign: "center" }}>
+            <button
+              type="button"
+              className="go-to-mealplan-btn"
+              style={{ width: "100%" }}
+              onClick={() => navigate("/MealPlaningParent", {
+                state: { user: { id: parentUid, email: email, user_type: "parent" } }
+              })}
+            >
+              המשך לטבלת הקניות ללא חיבור ילד
+            </button>
+          </div>
         </>
       )}
+    </div>
     </div>
   );
 }

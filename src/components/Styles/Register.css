@@ -9,7 +9,7 @@
   align-items: center;
 
   background: var(--bg);
-  padding: 40px 20px;
+  padding: 0 20px 40px;
   box-sizing: border-box;
   direction: rtl;
 }
@@ -33,7 +33,8 @@
   display: flex;
   flex-direction: column;
 
-  width: min(500px, 90vw);
+  width: min(420px, 90vw);
+  max-width: 420px;
 
   padding: 32px;
   background: var(--surface);
@@ -45,6 +46,14 @@
 
   gap: 14px;
 }
+
+@media (max-width: 768px) {
+  .register-form {
+    width: 100%;
+    padding: 24px;
+  }
+}
+
 
 /* INPUTS */
 .register-form input,
